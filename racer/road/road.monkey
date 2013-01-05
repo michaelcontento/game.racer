@@ -15,6 +15,7 @@ Class Road Implements Renderable, Updateable
     Const DRAW_DISTANCE:Int = 300
     Const FIELD_OF_VIEW:Float = 100
     Const RUMBLE_LENGTH:Float = 3
+    Const FOG_DENSITY:Float = 5
     Field cameraDepth:Float
     Field cameraHeight:Float = 1000
     Field segments:List<RoadSegment> = New List<RoadSegment>
@@ -59,6 +60,7 @@ Class Road Implements Renderable, Updateable
         For Local n:Int = 0 To DRAW_DISTANCE
             Local segment:RoadSegment = GetSegment(baseSegment.index + n)
             segment.looped = segment.index < baseSegment.index
+            segment.fog = CalculateFog(Float(n) / DRAW_DISTANCE, FOG_DENSITY)
 
             Local projectPosition:Float = position
             If segment.looped Then projectPosition -= Length()
@@ -80,6 +82,10 @@ Class Road Implements Renderable, Updateable
     End
 
     Private
+
+    Method CalculateFog:Float(distance:Float, density:Float)
+        Return 1.0 / Pow(MathHelper.E, (distance * distance * density))
+    End
 
     Method GetSegmentFromPosition:RoadSegment(position:Float)
         Return GetSegment(Floor(position / SEGMENT_LENGTH))

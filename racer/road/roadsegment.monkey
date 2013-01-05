@@ -16,15 +16,26 @@ Class RoadSegment
     Field p2:RoadSegmentPosition = New RoadSegmentPosition()
     Field color:ColorStore
     Field looped:Bool
+    Field fog:Float
 
     Method Render:Void()
         RenderGrass()
         RenderRumbles()
         RenderRoad()
         If color.lane Then RenderLanes()
+        RenderFog()
     End
 
     Private
+
+    Method RenderFog:Void()
+        If fog >= 1 Then Return
+
+        color.fog.alphaFloat = 1.0 - fog
+        color.fog.Activate()
+        DrawRect(0, p1.screen.y, Device.GetSize().x, p2.screen.y - p1.screen.y)
+        color.fog.Deactivate()
+    End
 
     Method RenderGrass:Void()
         color.grass.Activate()
