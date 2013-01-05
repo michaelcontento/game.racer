@@ -1,0 +1,6 @@
+# Important to keep the size of the repo small!
+*.build/*
+
+# Some other files we don't want
+*.pyc
+.DS_Store
