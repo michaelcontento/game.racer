@@ -1,0 +1,3 @@
+[submodule "bono"]
+	path = bono
+	url = git://github.com/michaelcontento/bono.git
