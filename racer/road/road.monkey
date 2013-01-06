@@ -4,14 +4,14 @@ Private
 
 Import bono
 Import racer.colorstore
+Import racer.player
 Import racer.road.roadsegment
 
 Public
 
-Class Road Implements Renderable, Updateable
+Class Road Implements Renderable
     Private
 
-    Const SEGMENT_LENGTH:Int = 200
     Const DRAW_DISTANCE:Int = 300
     Const FIELD_OF_VIEW:Float = 100
     Const RUMBLE_LENGTH:Float = 3
@@ -19,15 +19,17 @@ Class Road Implements Renderable, Updateable
     Field cameraDepth:Float
     Field cameraHeight:Float = 1000
     Field segments:List<RoadSegment> = New List<RoadSegment>
-    Field position:Float
-    Field playerX:Float = 0
+    Field player:Player
 
     Public
 
+    Const SEGMENT_LENGTH:Int = 200
     Const WIDTH:Float = 2000
     Const LANES:Int = 3
 
-    Method New()
+    Method New(player:Player)
+        Self.player = player
+        player.currentRoad = Self
         cameraDepth = ATanr((FIELD_OF_VIEW / 2) * PI / 180)
         Reset()
     End
@@ -49,12 +51,8 @@ Class Road Implements Renderable, Updateable
         End
     End
 
-    Method OnUpdate:Void(timer:DeltaTimer)
-        position += 30 * timer.delta
-    End
-
     Method OnRender:Void()
-        Local baseSegment:RoadSegment = GetSegmentFromPosition(position)
+        Local baseSegment:RoadSegment = GetSegmentFromPosition(player.pos)
         Local maxY:Float = Device.GetSize().y
 
         For Local n:Int = 0 To DRAW_DISTANCE
@@ -62,11 +60,11 @@ Class Road Implements Renderable, Updateable
             segment.looped = segment.index < baseSegment.index
             segment.fog = CalculateFog(Float(n) / DRAW_DISTANCE, FOG_DENSITY)
 
-            Local projectPosition:Float = position
+            Local projectPosition:Float = player.pos
             If segment.looped Then projectPosition -= Length()
 
-            segment.p1.Project(playerX, cameraHeight, projectPosition, cameraDepth)
-            segment.p2.Project(playerX, cameraHeight, projectPosition, cameraDepth)
+            segment.p1.Project(player.x, cameraHeight, projectPosition, cameraDepth)
+            segment.p2.Project(player.x, cameraHeight, projectPosition, cameraDepth)
 
             If segment.p1.camera.z <= cameraDepth Then Continue
             If segment.p2.screen.y >= maxY Then Continue
@@ -92,6 +90,6 @@ Class Road Implements Renderable, Updateable
     End
 
     Method GetSegment:RoadSegment(idx:Int)
-        Return segments.ToArray()[idx Mod Length()]
+        Return segments.ToArray()[idx Mod segments.Count()]
     End
 End
