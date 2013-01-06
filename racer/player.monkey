@@ -29,6 +29,7 @@ Class Player Implements Updateable, Keyhandler
     Public
 
     Field x:Float
+    Field y:Float
     Field pos:Float
     Field currentRoad:Road
 
