@@ -6,6 +6,7 @@ Import bono
 Import mojo
 Import racer.app
 Import racer.road.road
+Import racer.road.roadsegment
 
 Public
 
@@ -18,6 +19,7 @@ Class Player Implements Updateable, Keyhandler
     Const DECEL:Float = ACCEL * -1
     Const DECEL_OFFROAD:Float = (SPEED_LIMIT / 2) * -1
     Const BREAKING:Float = SPEED_LIMIT * -1
+    Const CENTRIFUGAL:Float = 0.3
     Field speed:Float
     Field keyFaster:Bool
     Field keySlower:Bool
@@ -70,6 +72,7 @@ Class Player Implements Updateable, Keyhandler
         End
 
         Local dt:Float = timer.frameTime / 1000
+
         UpdatePosition(dt)
         HandleSteering(dt)
         HandleThrottle(dt)
@@ -83,6 +86,11 @@ Class Player Implements Updateable, Keyhandler
         speed = 0
     End
 
+    Method GetCurrentCurvePower:Float()
+        Local segment:RoadSegment = currentRoad.GetPlayerSegment()
+        Return (speed / SPEED_LIMIT) * segment.curve
+    End
+
     Private
 
     Method UpdatePosition:Void(dt:Float)
@@ -92,11 +100,14 @@ Class Player Implements Updateable, Keyhandler
 
     Method HandleSteering:Void(dt:Float)
         Local dx:Float = dt * 2 * (speed / SPEED_LIMIT)
+
         If keyLeft
             x -= dx
         ElseIf keyRight
             x += dx
         End
+
+        x -= (dx * GetCurrentCurvePower() * CENTRIFUGAL)
     End
 
     Method HandleThrottle:Void(dt:Float)

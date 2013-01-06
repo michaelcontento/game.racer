@@ -17,6 +17,7 @@ Class RoadSegment
     Field color:ColorStore
     Field looped:Bool
     Field fog:Float
+    Field curve:Float
 
     Method Render:Void()
         RenderGrass()

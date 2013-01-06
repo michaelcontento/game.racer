@@ -14,8 +14,8 @@ Class RoadSegmentPosition
     Field screen:Vector3D = New Vector3D()
     Field screenScale:Float
 
-    Method Project:Void(playerX:Float, cameraHeight:Float, position:Float, cameraDepth:Float)
-        camera.x = world.x - (playerX * Road.WIDTH)
+    Method Project:Void(cameraX:Float, cameraHeight:Float, position:Float, cameraDepth:Float)
+        camera.x = world.x - cameraX
         camera.y = world.y - cameraHeight
         camera.z = world.z - position
 
