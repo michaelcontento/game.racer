@@ -102,17 +102,17 @@ Class Road Implements Renderable
         Local endY:Float = startY + (y * SEGMENT_LENGTH)
         Local total:Float = enter + hold + leave
 
-        For Local i:Float = 0 To enter
+        For Local i:Float = 0 Until enter
             AddSegment(
                 EaseIn(0, curve, i / enter),
                 EaseInOut(startY, endY, i / total))
         End
-        For Local i:Float = 0 To hold
+        For Local i:Float = 0 Until hold
             AddSegment(
                 curve,
                 EaseInOut(startY, endY, (i + enter) / total))
         End
-        For Local i:Float = 0 To leave
+        For Local i:Float = 0 Until leave
             AddSegment(
                 EaseOut(curve, 0, i / leave),
                 EaseInOut(startY, endY, (i + enter + hold) / total))
