@@ -173,6 +173,8 @@ Class Road Implements Renderable
 
             maxY = segment.p2.screen.y
         End
+
+        player.uphill = (GetPlayerSegment().p2.world.y - GetPlayerSegment().p1.world.y) > 0
     End
 
     Method Length:Float() Property
