@@ -104,18 +104,18 @@ Class Road Implements Renderable
 
         For Local i:Float = 0 To enter
             AddSegment(
-                EasyIn(0, curve, i / enter),
-                EasyInOut(startY, endY, i / total))
+                EaseIn(0, curve, i / enter),
+                EaseInOut(startY, endY, i / total))
         End
         For Local i:Float = 0 To hold
             AddSegment(
                 curve,
-                EasyInOut(startY, endY, (i + enter) / total))
+                EaseInOut(startY, endY, (i + enter) / total))
         End
         For Local i:Float = 0 To leave
             AddSegment(
-                EasyOut(curve, 0, i / leave),
-                EasyInOut(startY, endY, (i + enter + hold) / total))
+                EaseOut(curve, 0, i / leave),
+                EaseInOut(startY, endY, (i + enter + hold) / total))
         End
     End
 
@@ -192,15 +192,15 @@ Class Road Implements Renderable
         Return segments.Last().p2.world.y
     End
 
-    Method EasyIn:Float(a:Float, b:Float, percent:Float)
+    Method EaseIn:Float(a:Float, b:Float, percent:Float)
         Return a + (b - a) * Pow(percent, 2)
     End
 
-    Method EasyOut:Float(a:Float, b:Float, percent:Float)
+    Method EaseOut:Float(a:Float, b:Float, percent:Float)
         Return a + (b - a) * (1.0 - Pow(1.0 - percent, 2))
     End
 
-    Method EasyInOut:Float(a:Float, b:Float, percent:Float)
+    Method EaseInOut:Float(a:Float, b:Float, percent:Float)
         Return a + (b - a) * ((-Cosr(percent * MathHelper.PI) / 2) + 0.5)
     End
 
