@@ -3,14 +3,13 @@ Strict
 Private
 
 Import bono
-Import mojo
 Import racer.app
 Import racer.road.road
 Import racer.road.roadsegment
 
 Public
 
-Class Player Implements Updateable, Keyhandler, Renderable
+Class Player Implements Updateable, Renderable
     Private
 
     Const SPEED_LIMIT:Float = Road.SEGMENT_LENGTH / (1.0 / 60.0)
@@ -66,40 +65,27 @@ Class Player Implements Updateable, Keyhandler, Renderable
         car.GetPosition().x = Director.Shared().GetApp().GetVirtualSize().x / 2
         car.GetPosition().y = Director.Shared().GetApp().GetVirtualSize().y
 
-        car.scale.x = 3
-        car.scale.y = 3
+        car.scale.x = 3.5
+        car.scale.y = 3.5
 
         Align.Horizontal(car, Align.CENTER)
         Align.Vertical(car, Align.BOTTOM)
     End
 
-    Method OnKeyDown:Void(event:KeyEvent)
-        Select event.code
-        Case KEY_W
-            keyFaster = True
-        Case KEY_S
-            keySlower = True
-        Case KEY_A
-            keyLeft = True
-        Case KEY_D
-            keyRight = True
-        End
+    Method ControlLeft:Void(active:Bool)
+        keyLeft = active
     End
 
-    Method OnKeyPress:Void(event:KeyEvent)
+    Method ControlRight:Void(active:Bool)
+        keyRight = active
     End
 
-    Method OnKeyUp:Void(event:KeyEvent)
-        Select event.code
-        Case KEY_W
-            keyFaster = False
-        Case KEY_S
-            keySlower = False
-        Case KEY_A
-            keyLeft = False
-        Case KEY_D
-            keyRight = False
-        End
+    Method ControlAccel:Void(active:Bool)
+        keyFaster = active
+    End
+
+    Method ControlDecel:Void(active:Bool)
+        keySlower = active
     End
 
     Method OnUpdate:Void(timer:DeltaTimer)
