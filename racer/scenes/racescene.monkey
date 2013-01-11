@@ -26,6 +26,8 @@ Class RaceScene Extends Scene
         AddChild(New Road(player))
         AddChild(player)
 
+        If Target.IS_DEBUG Then AddChild(New FpsCounter())
+
         If Target.IS_GLFW Or Target.IS_ANDROID
             EnableKeyEvents()
             GetKeyEmitter().showKeyboard = False
